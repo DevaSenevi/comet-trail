@@ -3,10 +3,21 @@
 import React, { useEffect } from 'react';
 import * as THREE from 'three';
 
+const randomVariance = 0.1;
+const radius = 2;
+
+const generateCoordinates = (angle) => {
+  return {
+    x: radius * Math.cos(angle) + (Math.random() - 0.5) * randomVariance,
+    y: radius * Math.sin(angle) + (Math.random() - 0.5) * randomVariance,
+    z: 0,
+  };
+};
+
 const CircularTrail = () => {
   useEffect(() => {
 
-    console.log('useEffect triggered');
+    //console.log('useEffect triggered');
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
@@ -81,11 +92,7 @@ const CircularTrail = () => {
 
     const animate = () => {
       angle += angleIncrement;
-      const headPosition = {
-        x: radius * Math.cos(angle),
-        y: radius * Math.sin(angle),
-        z: 0,
-      };
+      const headPosition = generateCoordinates(angle);
 
       // Shift all positions and sizes one step forward in the trail
       for (let i = trailLength - 1; i > 0; i--) {
