@@ -2,10 +2,40 @@
 
 import React, { useEffect } from 'react';
 import * as THREE from 'three';
+import Papa from 'papaparse';
+
+//Read data from csv file
+const handleCSVUpload = async (event) => {
+  const file = event.target.files[0];
+
+  if (file) {
+    const csvText = await file.text();
+
+    return new Promise((resolve, reject) => {
+      Papa.parse(csvText, {
+        header: true,
+        complete: (results) => {
+          const cocorinates = results.data.map(row =>     ({
+            x: row.x,
+            y: row.y,
+            z: row.z,
+          }));
+          resolve(cocorinates);
+
+        },
+        error: (error) => {
+          reject(error);
+        },
+      });
+    });
+  }
+};
+
 
 const randomVariance = 0.1;
 const radius = 2;
 
+//gnerate random cocorinates in a circle
 const generateCoordinates = (angle) => {
   return {
     x: radius * Math.cos(angle) + (Math.random() - 0.5) * randomVariance,
